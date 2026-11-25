@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POTION HAVEN | 메뉴판 Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FAF8F5;
+      --card: #FFFFFF;
+      --text: #1F1E1C;
+      --muted: #6B665E;
+      --accent: #7A4B32;
+      --accent-soft: #F1E9E2;
+      --border: #E6E0D6;
+      --tag-bg: #F3EFEA;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      padding-bottom: 60px;
+    }
+
+    /* 상단 헤더 */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 248, 245, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .top-bar {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 14px 16px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text);
+    }
+
+    .brand-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .lang-toggle {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--card);
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      padding: 5px 11px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .lang-btn.active {
+      background: var(--accent);
+      color: #FFF;
+    }
+
+    /* 카테고리 탭 */
+    .nav-scroll {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 6px 16px 12px;
+      scrollbar-width: none;
+    }
+    .nav-scroll::-webkit-scrollbar { display: none; }
+
+    .nav-tab {
+      flex: 0 0 auto;
+      padding: 6px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .nav-tab:hover, .nav-tab.active {
+      background: var(--text);
+      color: #FFF;
+      border-color: var(--text);
+    }
+
+    /* 메인 컨테이너 */
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    section {
+      margin-top: 28px;
+      scroll-margin-top: 108px;
+    }
+    section:first-child { margin-top: 8px; }
+
+    .sec-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 2px solid var(--text);
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+    }
+
+    .sec-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .sec-note {
+      font-size: 0.78rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* 카드 스타일 */
+    .menu-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 15px 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .item-name {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .item-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .item-price {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--accent);
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .sub-price {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .item-desc {
+      font-size: 0.85rem;
+      color: #3E3B36;
+      margin-top: 8px;
+    }
+
+    .combo-box {
+      margin-top: 9px;
+      padding: 8px 11px;
+      background: var(--accent-soft);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .combo-label {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .addon-list {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tag-row {
+      margin-top: 9px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      background: var(--tag-bg);
+      color: #4F4A42;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    /* 매장 하단 정보 */
+    .info-box {
+      margin-top: 32px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .info-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .info-links {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-link {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: var(--text);
+      color: #FFF;
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 500;
+    }
+
+    .btn-link.outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    /* 언어 전환 처리 */
+    body.lang-ko .en { display: none; }
+    body.lang-en .ko { display: none; }
+  </style>
+</head>
+<body class="lang-ko">
+
+<header>
+  <div class="top-bar">
+    <div>
+      <div class="brand-title">POTION HAVEN</div>
+      <div class="brand-sub">
+        <span class="ko">경주 전통주 바 & 양조장</span>
+        <span class="en">Gyeongju Traditional Liquor Bar & Brewery</span>
+      </div>
+    </div>
+    <div class="lang-toggle" role="group" aria-label="Language Switch">
+      <button class="lang-btn active" onclick="setLang('ko')">한국어</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+
+  <nav class="nav-scroll">
+    <a class="nav-tab" href="#special"><span class="ko">낮술상·이달의 칵테일</span><span class="en">Daytime & Monthly</span></a>
+    <a class="nav-tab" href="#food"><span class="ko">안주 & 세트</span><span class="en">Food & Combos</span></a>
+    <a class="nav-tab" href="#takju"><span class="ko">탁주</span><span class="en">Takju</span></a>
+    <a class="nav-tab" href="#yakju"><span class="ko">청·약주</span><span class="en">Cheong·Yakju</span></a>
+    <a class="nav-tab" href="#fruit"><span class="ko">과실주</span><span class="en">Fruit Wine</span></a>
+    <a class="nav-tab" href="#soju"><span class="ko">소주</span><span class="en">Soju</span></a>
+    <a class="nav-tab" href="#spirits"><span class="ko">증류주</span><span class="en">Distilled Spirits</span></a>
+    <a class="nav-tab" href="#bev"><span class="ko">음료·안내</span><span class="en">Beverages & Info</span></a>
+  </nav>
+</header>
+
+<main>
+  <!-- 1. 낮술상 & 이 달의 칵테일 -->
+  <section id="special">
+    <div class="sec-header">
+      <h2 class="sec-title"><span class="ko">낮술상</span><span class="en">Daytime Tasting Set</span></h2>
+      <span class="sec-note"><span class="ko">14:00 ~ 18:00 한정 판매</span><span class="en">14:00 – 18:00 Limited</span></span>
+    </div>
+
+    <div class="menu-card">
+      <div class="item-top">
+        <div>
+          <div class="item-name">
+            <span class="ko">복단지 약주 (잔술 120ml) + 훈제오리</span>
+            <span class="en">Bokdanji Yakju (Glass 120ml) + Smoked Duck</span>
+          </div>
+        </div>
+        <div class="item-price">16,000원</div>
+      </div>
+      <div class="addon-list">
+        <span><span class="ko">단품 추가: 복단지 약주(120ml) 14,000원</span><span class="en">Add-on: Bokdanji Yakju(120ml) 14,000</span></span>
+        <span><span class="ko">훈제오리 6,000원</span><span class="en">Smoked Duck 6,000</span></span>
+      </div>
+    </div>
+
+    <div class="menu-card">
+      <div class="item-top">
+        <div>
+          <div class="item-name">
+            <span class="ko">사이더 + 치즈플레이트</span>
+            <span class="en">Cider + Cheese Plate</span>
+          </div>
+        </div>
+        <div class="item-price">12,000원</div>
+      </div>
+      <div class="addon-list">
+        <span><span class="ko">단품 추가: 사이더 9,000원</span><span class="en">Add-on: Cider 9,000</span></span>
+        <span><span class="ko">미니 치즈플레이트 5,000원</span><span class="en">Mini Cheese Plate 5,000</span></span>
+      </div>
+    </div>
+
+    <div class="sec-header" style="margin-top: 24px;">
+      <h2 class="sec-title"><span class="ko">이 달의 칵테일</span><span class="en">Cocktail of the Month</span></h2>
+      <span class="sec-note"><span class="ko">1인당 1잔 한정 판매</span><span class="en">Limit 1 Glass per Person</span></span>
+    </div>
+
+    <div class="menu-card">
+      <div class="item-top">
+        <div>
+          <div class="item-name"><span class="ko">🌿 허브 하이볼</span><span class="en">🌿 Herb Highball</span></div>
+          <div class="item-meta">ABV 7.5%</div>
+        </div>
+        <div class="item-price">10,000원</div>
+      </div>
+      <p class="item-desc">
+        <span class="ko">단맛은 덜어내고, 인삼주 특유의 쌉싸름함과 매장에서 직접 뽑아낸 허브의 아로마를 산뜻하게 채운 드라이 하이볼.</span>
+        <span class="en">A dry highball cutting back on sweetness, balancing the earthy bitterness of ginseng liquor with fresh house-infused herb aroma.</span>
+      </p>
+      <div class="tag-row">
+        <span class="tag"><span class="ko">#드라이</span><span class="en">#Dry</span></span>
+        <span class="tag"><span class="ko">#씁쓸함</span><span class="en">#Bitter</span></span>
+        <span class="tag"><span class="ko">#허브향</span><span class="en">#Herbal</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 안주 & 한 병 세트 -->
+  <section id="food">
+    <div class="sec-header">
+      <h2 class="sec-title"><span class="ko">안주 & 한 병 페어링 세트</span><span class="en">Dishes & Bottle Combos</span></h2>
+    </div>
+
+    <div id="food-list"></div>
+  </section>
+
+  <!-- 3. 탁주 -->
+  <section id="takju">
+    <div class="sec-header">
+      <h2 class="sec-title"><span class="ko">탁주</span><span class="en">Takju (Makgeolli)</span></h2>
+    </div>
+    <div id="takju-list"></div>
+  </section>
+
+  <!-- 4. 청·약주 -->
+  <section id="yakju">
+    <div class="sec-header">
+      <h2 class="sec-title"><span class="ko">청·약주</span><span class="en">Cheongju & Yakju</span></h2>
+    </div>
+    <div id="yakju-list"></div>
+  </section>
+
+  <!-- 5. 과실주 -->
+  <section id="fruit">
+    <div class="sec-header">
+      <h2 class="sec-title"><span class="ko">과실주</span><span class="en">Fruit Wine & Cider</span></h2>
+    </div>
+    <div id="fruit-list"></div>
+  </section>
+
+  <!-- 6. 소주 -->
+  <section id="soju">
+    <div class="sec-header">
+      <h2 class="sec-title"><span class="ko">소주</span><span class="en">Soju</span></h2>
+    </div>
+    <div id="soju-list"></div>
+  </section>
+
+  <!-- 7. 증류주 -->
+  <section id="spirits">
+    <div class="sec-header">
+      <h2 class="sec-title"><span class="ko">증류주</span><span class="en">Distilled Spirits</span></h2>
+    </div>
+    <div id="spirits-list"></div>
+  </section>
+
+  <!-- 8. 음료 & 매장 안내 -->
+  <section id="bev">
+    <div class="sec-header">
+      <h2 class="sec-title"><span class="ko">음료</span><span class="en">Beverages</span></h2>
+    </div>
+    <div class="menu-card">
+      <div class="item-top">
+        <div>
+          <div class="item-name"><span class="ko">소프트 드링크</span><span class="en">Soft Drinks</span></div>
+          <div class="item-meta">
+            <span class="ko">콜라, 제로콜라, 사이다, 제로사이다, 토닉워터, 탄산수</span>
+            <span class="en">Coke, Zero Coke, Sprite, Zero Sprite, Tonic Water, Sparkling Water</span>
+          </div>
+        </div>
+        <div class="item-price">2,500원</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-title">POTION HAVEN</div>
+      <p style="font-size: 0.84rem; color: var(--muted);">
+        <span class="ko">술에 관한 더 자세한 이야기는 인스타그램에서 확인하세요.</span>
+        <span class="en">Discover more stories about our traditional liquors on Instagram.</span>
+      </p>
+      <div class="info-links">
+        <a class="btn-link" href="https://www.instagram.com/potion_haven" target="_blank" rel="noopener">@POTION_HAVEN</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  const foods = [
+    {
+      ko: "닭도리탕", en: "Spicy Chicken Stew", price: "13,000원",
+      comboKo: "한 병 세트: 백련 미스티", comboEn: "Bottle Combo: Baekryeon Misty", comboPrice: "21,000원",
+      descKo: "매운맛의 자극을 백련미스티의 은은한 단맛과 바나나 향이 완화해 부드럽고 균형잡힌 맛으로 이어집니다.",
+      descEn: "The fiery kick of the spice is softened by Baekryeon Misty's subtle sweetness and banana aroma, leading to a smooth, balanced finish."
+    },
+    {
+      ko: "버섯파스타", en: "Mushroom Pasta", price: "12,000원",
+      comboKo: "한 병 세트: 한산소곡주", comboEn: "Bottle Combo: Hansan Sogokju", comboPrice: "27,000원",
+      descKo: "파스타의 묵직한 풍미와 한산소곡주의 진한 발효향이 어울리며 마지막에 은은한 매콤함이 깔끔하게 마무리 됩니다.",
+      descEn: "The rich flavor of the pasta pairs beautifully with the deep, fermented aroma of Hansan Sogokju, while a subtle hint of spiciness provides a clean and crisp finish."
+    },
+    {
+      ko: "파전", en: "Green Onion Pancake", price: "7,000원",
+      comboKo: "한 병 세트: 천년 / 보리탁 막걸리", comboEn: "Bottle Combo: Cheonnyeon / Boritak Makgeolli", comboPrice: "11,000원",
+      descKo: "파전의 바삭하고 기름진 풍미를 막걸리의 산뜻한 탄산과 산미가 깔끔하게 잡아주는 조합입니다.",
+      descEn: "The crispy, savory flavors of green onion pancake pair refreshingly with the crisp carbonation and acidity of makgeolli."
+    },
+    {
+      ko: "국물떡볶이", en: "Soupy Tteokbokki", price: "13,000원",
+      comboKo: "한 병 세트: 동해소주", comboEn: "Bottle Combo: Donghae Soju", comboPrice: "18,000원",
+      descKo: "쌀 고유의 깔끔한 풍미가 떡볶이 국물의 묵직하고 달콤한 감칠맛 뒤를 텁텁하지 않게 정리해 줍니다.",
+      descEn: "The clean, subtle rice flavor of Donghae Soju washes over the rich, sweet, and spicy umami of the tteokbokki broth for a crisp finish."
+    },
+    {
+      ko: "과일화채", en: "Fresh Fruit Punch", price: "10,000원",
+      comboKo: "한 병 세트: 애플스피릿", comboEn: "Bottle Combo: Apple Spirit", comboPrice: "21,000원",
+      descKo: "애플스피릿의 사과향이 달달하고 시원한 과일화채와 어우러져 다양한 과일의 시너지를 극대화합니다.",
+      descEn: "Apple Spirit's crisp apple notes pair with refreshing fruit punch to deliver a rich synergy of fruit flavors."
+    },
+    {
+      ko: "물만두", en: "Boiled Dumplings", price: "7,000원",
+      comboKo: "한 병 세트: 서울고량주 레드", comboEn: "Bottle Combo: Seoul Goryangju Red", comboPrice: "26,000원",
+      descKo: "물만두 특유의 육즙과 은은한 향신료에 서울고량주 레드의 파인애플 향과 강렬한 알코올감이 어우러집니다.",
+      descEn: "The juicy filling and subtle spices of boiled dumplings pair seamlessly with the pineapple aroma and bold alcoholic kick of Seoul Goryangju Red."
+    },
+    {
+      ko: "치즈 플레이트", en: "Cheese Plate", price: "10,000원",
+      comboKo: "한 병 세트: 사이더", comboEn: "Bottle Combo: Cider", comboPrice: "17,500원",
+      descKo: "치즈의 감칠맛, 꿀의 달콤, 견과류의 고소함의 다양한 풍미가 사이더의 시원한 청량감이 입안을 정돈해 줍니다.",
+      descEn: "A rich variety of flavors—savory cheese, sweet honey, and nutty nuts—is neatly refreshed by the cool, crisp effervescence of the cider."
+    }
+  ];
+
+  const drinks = {
+    takju: [
+      { ko: "백련미스티", en: "Baekryeon Misty", makerKo: "신평양조장", makerEn: "Sinpyeong Brewery", abv: "7%", typeKo: "탁주", typeEn: "Takju", bottle: "10,000원", tagsKo: ["#연잎", "#부드러움", "#살균"], tagsEn: ["#LotusLeaf", "#Smooth", "#Pasteurized"] },
+      { ko: "천년 막걸리", en: "Cheonnyeon Makgeolli", makerKo: "경주전통술도가", makerEn: "Gyeongju Traditional Brewery", abv: "5%", typeKo: "탁주", typeEn: "Takju", bottle: "5,000원", tagsKo: ["#쌀", "#탄산", "#달달"], tagsEn: ["#Rice", "#Carbonated", "#Sweet"] },
+      { ko: "보리탁 막걸리", en: "Boritak Makgeolli", makerKo: "경주전통술도가", makerEn: "Gyeongju Traditional Brewery", abv: "5.5%", typeKo: "탁주", typeEn: "Takju", bottle: "5,000원", tagsKo: ["#보리", "#조리퐁", "#달달"], tagsEn: ["#Barley", "#ToastedCereal", "#Sweet"] }
+    ],
+    yakju: [
+      { ko: "복단지 약주", en: "Bokdanji Yakju", makerKo: "술아원", makerEn: "Soolawon", abv: "14%", typeKo: "약주", typeEn: "Yakju", bottle: "42,000원", tagsKo: ["#복분자", "#드라이", "#쌉쌀"], tagsEn: ["#Raspberry", "#Dry", "#Bitter"] },
+      { ko: "경성과하주", en: "Gyeongseong Gwahaju", makerKo: "술아원", makerEn: "Soolawon", abv: "20%", typeKo: "약주", typeEn: "Yakju", bottle: "55,000원", glass: "18,000원", tagsKo: ["#포도", "#배", "#꿀"], tagsEn: ["#Grape", "#Pear", "#Honey"] },
+      { ko: "금산인삼주", en: "Geumsan Insamju", makerKo: "금산인삼주", makerEn: "Geumsan Insamju", abv: "12.5%", typeKo: "약주", typeEn: "Yakju", bottle: "11,000원", tagsKo: ["#달달", "#은은", "#부드러움"], tagsEn: ["#Sweet", "#Subtle", "#Smooth"] },
+      { ko: "한산소곡주", en: "Hansan Sogokju", makerKo: "한산소곡주", makerEn: "Hansan Sogokju", abv: "18%", typeKo: "약주", typeEn: "Yakju", bottle: "20,000원", tagsKo: ["#발효향", "#짭짤", "#스파이시"], tagsEn: ["#RichFermented", "#SavoryUmami", "#Spicy"] }
+    ],
+    fruit: [
+      { ko: "클래식 드라이", en: "Classic Dry", makerKo: "댄싱사이더", makerEn: "Dancing Cider", abv: "6%", typeKo: "사이더", typeEn: "Cider", bottle: "9,000원", tagsKo: ["#풋사과", "#드라이", "#탄산"], tagsEn: ["#UnripeApple", "#Dry", "#Carbonated"] },
+      { ko: "베리 딜리셔스", en: "Berry Delicious", makerKo: "댄싱사이더", makerEn: "Dancing Cider", abv: "4.6%", typeKo: "사이더", typeEn: "Cider", bottle: "9,000원", tagsKo: ["#석류", "#체리", "#탄산"], tagsEn: ["#Pomegranate", "#Cherry", "#Carbonated"] },
+      { ko: "상큼 시트러스", en: "Crisp Citrus", makerKo: "댄싱사이더", makerEn: "Dancing Cider", abv: "5%", typeKo: "사이더", typeEn: "Cider", bottle: "9,000원", tagsKo: ["#유자", "#레몬라임", "#탄산"], tagsEn: ["#Yuzu", "#LemonLime", "#Carbonated"] },
+      { ko: "스위트 애플", en: "Sweet Apple", makerKo: "댄싱사이더", makerEn: "Dancing Cider", abv: "4.3%", typeKo: "사이더", typeEn: "Cider", bottle: "9,000원", tagsKo: ["#사과", "#달달", "#탄산"], tagsEn: ["#Apple", "#Sweet", "#Carbonated"] }
+    ],
+    soju: [
+      { ko: "동해소주", en: "Donghae Soju", makerKo: "설악프로방스 배꽃마을", makerEn: "Seorak Provence Baekkkeot Village", abv: "17.5%", typeKo: "소주", typeEn: "Soju", bottle: "7,000원", tagsKo: ["#전통", "#누룽지", "#부드러움"], tagsEn: ["#Traditional", "#ScorchedRice", "#Smooth"] },
+      { ko: "안동소주", en: "Andong Soju", makerKo: "명인안동소주", makerEn: "Myeongin Andong Soju", abv: "22%", typeKo: "소주", typeEn: "Soju", bottle: "12,000원", tagsKo: ["#쌀", "#드라이", "#꽃향"], tagsEn: ["#Rice", "#Dry", "#Floral"] },
+      { ko: "삼해소주", en: "Samhae Soju", makerKo: "삼해소주", makerEn: "Samhae Soju", abv: "45%", typeKo: "소주", typeEn: "Soju", bottle: "60,500원", glass: "12,000원", tagsKo: ["#소나무", "#박하", "#로즈마리"], tagsEn: ["#Pine", "#Mint", "#Rosemary"] }
+    ],
+    spirits: [
+      { ko: "애플 스피릿", en: "Apple Spirit", makerKo: "댄싱사이더", makerEn: "Dancing Cider", abv: "20%", typeKo: "브랜디", typeEn: "Brandy", bottle: "16,500원", tagsKo: ["#사과", "#부드러움", "#드라이"], tagsEn: ["#Apple", "#Smooth", "#Dry"] },
+      { ko: "서울고량주 레드", en: "Seoul Goryangju Red", makerKo: "한국고량주", makerEn: "Hankook Goryangju", abv: "35%", typeKo: "고량주", typeEn: "Goryangju", bottle: "28,000원", tagsKo: ["#고도수", "#파인애플", "#꽃향"], tagsEn: ["#HighABV", "#Pineapple", "#Floral"] },
+      { ko: "서울고량주 오크", en: "Seoul Goryangju Oak", makerKo: "한국고량주", makerEn: "Hankook Goryangju", abv: "40%", typeKo: "고량주", typeEn: "Goryangju", bottle: "35,000원", tagsKo: ["#위스키", "#파인애플", "#초코릿"], tagsEn: ["#Whiskey", "#Pineapple", "#Chocolate"] },
+      { ko: "수삼 43", en: "Susam 43", makerKo: "금산인삼주", makerEn: "Geumsan Insamju", abv: "43%", typeKo: "증류주", typeEn: "Distilled Spirits", bottle: "36,000원", tagsKo: ["#통인삼", "#고도수", "#스파이시"], tagsEn: ["#WholeGinseng", "#HighProof", "#Spicy"] }
+    ]
+  };
+
+  function renderFoods() {
+    const el = document.getElementById('food-list');
+    el.innerHTML = foods.map(f => `
+      <div class="menu-card">
+        <div class="item-top">
+          <div class="item-name"><span class="ko">${f.ko}</span><span class="en">${f.en}</span></div>
+          <div class="item-price">${f.price}</div>
+        </div>
+        <div class="combo-box">
+          <span class="combo-label"><span class="ko">${f.comboKo}</span><span class="en">${f.comboEn}</span></span>
+          <span class="item-price">${f.comboPrice}</span>
+        </div>
+        <p class="item-desc"><span class="ko">${f.descKo}</span><span class="en">${f.descEn}</span></p>
+      </div>
+    `).join('');
+  }
+
+  function renderDrinkSection(key, targetId) {
+    const el = document.getElementById(targetId);
+    el.innerHTML = drinks[key].map(d => `
+      <div class="menu-card">
+        <div class="item-top">
+          <div>
+            <div class="item-name"><span class="ko">${d.ko}</span><span class="en">${d.en}</span></div>
+            <div class="item-meta">
+              <span class="ko">${d.makerKo} · ${d.abv} · ${d.typeKo}</span>
+              <span class="en">${d.makerEn} · ${d.abv} · ${d.typeEn}</span>
+            </div>
+          </div>
+          <div class="item-price">
+            Bottle ${d.bottle}
+            ${d.glass ? `<span class="sub-price">Glass ${d.glass}</span>` : ''}
+          </div>
+        </div>
+        <div class="tag-row">
+          ${d.tagsKo.map((t, i) => `<span class="tag"><span class="ko">${t}</span><span class="en">${d.tagsEn[i]}</span></span>`).join('')}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function setLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.querySelectorAll('.lang-btn').forEach((btn, idx) => {
+      btn.classList.toggle('active', (lang === 'ko' && idx === 0) || (lang === 'en' && idx === 1));
+    });
+  }
+
+  renderFoods();
+  renderDrinkSection('takju', 'takju-list');
+  renderDrinkSection('yakju', 'yakju-list');
+  renderDrinkSection('fruit', 'fruit-list');
+  renderDrinkSection('soju', 'soju-list');
+  renderDrinkSection('spirits', 'spirits-list');
+</script>
+
+</body>
+</html>
